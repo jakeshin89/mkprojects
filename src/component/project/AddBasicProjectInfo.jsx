@@ -32,7 +32,6 @@ class AddBasicProjectInfo extends Component{
       width: '38%',
       widthMessage: '이건 width가 68%'
     });
-    
   }
   
   eateryInfoCloseMC = () => {
@@ -80,7 +79,13 @@ class AddBasicProjectInfo extends Component{
               <Label totalExpense for="totalExpense">총예산:</Label>
               <input type="text" placeholder="" id="totalExpense" name="totalExpense"
                 className="totalExpense" value={this.state.totalExpense} onChange={this.onChange} />원
-            </div>          
+            </div>
+            <hr/>
+              경로최적화?
+            <hr/>
+
+            
+
           </div>
 
           {!modal && (
