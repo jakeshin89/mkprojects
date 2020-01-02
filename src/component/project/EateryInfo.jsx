@@ -3,9 +3,22 @@ import "./EateryInfo.css";
 
 class EateryInfo extends Component{
 
+  constructor(props){
+    super(props);
+    this.state = {
+      storeName: '',
+      storeAddress: '',
+      storeTel: '',
+      storeMainMenu: '',
+    }
+  }
+
   render(){
 
-    const { eateryInfoCloseMC } = this.props;
+    const { eateryInfoCloseMC, storeName, storeAddress, storeTel, storeMainMenu } = this.props;
+    //const { storeName, storeAddress, storeTel, storeMainMenu } = this.state;
+
+    console.log('EateryInfo() rendered');
 
     return(
       <div>
@@ -13,15 +26,16 @@ class EateryInfo extends Component{
         <div className="eateryInfo">
 
           <br/>
-          <h3 className="sectionHeader">음식점이름<b>{this.props.storeName}</b></h3>
+          <h3 className="sectionHeader"><b>{storeName}</b></h3>
           <br/>
           <div className="mainImage">
           </div>
 
           <h3 className="sectionHeader">Information</h3>
           <div className="information">
-            주소: <br/>
-            전화번호: <br/>
+            주소: {storeAddress}<br/>
+            전화번호: {storeTel}<br/>
+            메인메뉴: {storeMainMenu}
           </div>
           <br/>
 

@@ -32,7 +32,7 @@
 .wow{
   overflow: scroll;
   display: block;
-  height: 85%;
+  height: 84%;
   background-color: white;
 }
 
@@ -65,9 +65,10 @@
 
 .routeDetailInfo{
   position: relative;
-  left: -10px;
+  left: -30px;
   display: inline-block;
   width: 120px;
+  margin-top: 5px;
 }
 
 .time{
@@ -83,7 +84,8 @@
 .expense{
   font-size: 0.8em;
   border: none;
-  width: 80px;
+  width: 62px;
+  text-align: right;
 }
 
 .expense:hover{
@@ -106,6 +108,13 @@
   cursor: pointer;
 }
 
+.btnNavi{
+  display: inline-block;
+  width: 170px;
+  margin: 0 auto 10px auto;
+  text-align: center;
+}
+
 .btnOpenEatery{
   position: relative;
   left: 250px;
@@ -122,7 +131,7 @@
 .googleMap{
   float: right;
   width: 68%; /*max:84, min:68*/
-  height: 100%;
+  height: 97%;
   
   background-color: palevioletred;
 
