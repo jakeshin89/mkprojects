@@ -31,6 +31,15 @@ class Project extends React.Component {
       date: '',
       totalExpense: '',
 
+      //음식점 보여주기
+      tel: '',
+      address: '',
+      storeName: '',
+      mainMenu: '',
+
+      time: '',
+      expense: '',
+
       width: '84.3%',
       widthMessage: 'default는 84.3%'
     };
@@ -108,11 +117,27 @@ class Project extends React.Component {
           // -> Json에서 가져왔을 때
 
         if (store.storeName === selectedStores[i]) {
-          // -> DB에서 가져왔을 때
+          // -> DB에서 가져왔을 때, selectedStores[i]는 이름만 가져옴
           var coordinateObject = { coordinate: selectedStores[i + 1] };
 
-          console.log("store는 JSON이 맞니? " + JSON.stringify(store)); // -> 맞다고 전해라~
+          console.log("store는 JSON이 맞니? 오 여기서 다 뜨나?" + JSON.stringify(store)); // -> 맞다고 전해라~
+          console.log('store', store);//캬 추출완료
           console.log("coordinateObject는 JSON이 맞니? "+JSON.stringify(coordinateObject));
+
+          console.log('store.ownerNo 추출 => ', store.ownerNo);
+          console.log('store.tel 추출 => ', store.tel);
+          console.log('store.address 추출 => ', store.address);
+          console.log('store.storeName 추출 => ', store.storeName);
+          console.log('store.mainMenu 추출 => ', store.mainMenu);
+
+          /* 여기서 하면 오류뜨네
+          this.setState = ({
+            storeName: store.storeName,
+            tel: store.tel,
+            address: store.address,
+            mainMenu: store.mainMenu
+          })
+          */
 
           // store에 좌표를 추가하기 ...드디어 성공 흑흑 JQuery 최고야
           store = $.extend(store,coordinateObject);
@@ -213,7 +238,7 @@ class Project extends React.Component {
   render() {
     const { storeResult, showResult } = this.state;
 
-    console.log('AddBasicProjectInfo render()');
+    console.log('project.jsx render()');
     console.log('제목이다 이것들아', this.state.title);
 
     const { modal, eateryInfoCloseMC, width } = this.state;
@@ -231,8 +256,8 @@ class Project extends React.Component {
               value={this.state.subject} onChange={this.onChange} />  
           </div>
           <BtnGroup>
-            <Button onClick={this.cancel}>취 소</Button>
-            <Button save>저 장</Button>
+            <Button1 onClick={this.cancel}>취 소</Button1>
+            <Button1 save>저 장</Button1>
           </BtnGroup>
         </div>
 
@@ -256,45 +281,60 @@ class Project extends React.Component {
             </div>
             <hr/>
 
-            <div>
+            <div className="wow">
 
-              프로젝트 생성 페이지 오홍홍 <br/>
+              프로젝트 생성 페이지 오홍홍홍 <br/>
               선택한 마커 넘어와서 리스트에 저장 되었니? 
               {this.state.selectedStores}
               <br/>
               {showResult && (
-          <div className="selectedStores" style={{overflow: "scroll"}}>
-            <Row className="justify-content-center">
-              <Button1 onClick={() => this.shortestPath()}>경로 최적화</Button1>
-            </Row>
+                <div className="selectedStores" style={{overflow: "scroll"}}>
+                <Row className="justify-content-center">
+                  <Button onClick={() => this.shortestPath()}>경로 최적화</Button>
+                </Row>
 
-            {storeResult.map(row => (
-              <div
-                className="singleStore"
-                name='singleStore'
-                id={row.ownerNo}
-                key={row.ownerNo /* row.A */ } 
-                value={row.coordinate}
-              >
-                {/* JSON으로 가져올 때 */}
-                {/* <p> {row.A}</p>
-                <p> {row.B}</p>
-                <p> {row.C}</p>
-                <p> {row.D}</p>
-                <p> {row.E}</p> */}
+                {storeResult.map(row => (
+                  <div
+                    className="singleStore"
+                    name='singleStore'
+                    id={row.ownerNo}
+                    key={row.ownerNo /* row.A */ } 
+                    value={row.coordinate}
+                  >
+                    <Route>
+                      <RouteEateryInfo>
+                        <p> 가게 이름 : {row.storeName}</p>
 
-                {/* DB에서 가져올 때 */}
-                <p> OwnerNo : {row.ownerNo}</p>
-                <p> 가게 이름 : {row.storeName}</p>
-                <p> 주소 : {row.address}</p>
-                <p> 전화 번호 : {row.tel}</p>
-                <p> 메인 메뉴 : {row.mainMenu}</p>
-                <p> 좌표 : {row.coordinate}</p>
-                <Button onClick={() => this.dropStore(row.ownerNo)} variant="danger">삭제</Button>
-              </div>
-            ))}
-          </div>
-        )}{" "}
+                        {/*
+                        <p> OwnerNo : {row.ownerNo}</p>
+                        <p> 가게 이름 : {row.storeName}</p>
+                        <p> 주소 : {row.address}</p>
+                        <p> 전화 번호 : {row.tel}</p>
+                        <p> 메인 메뉴 : {row.mainMenu}</p>
+                        <p> 좌표 : {row.coordinate}</p>
+                      */}
+
+                      </RouteEateryInfo>
+                      <div className="routeDetailInfo">
+                        <Label time for="time">시간:</Label>
+                        <input type="text" id="time" name="time"
+                          className="time" value={this.state.time} onChange={this.onChange} />
+                        <Label expense for="expense">예산:</Label>
+                        <input type="text" id="expense" name="expense" 
+                          className="expense" value={this.state.expense} onChange={this.onChange} />
+                      </div>
+                      <BtnRouteDelete onClick={() => this.dropStore(row.ownerNo)} variant="danger">
+                      <i class="fas fa-trash-alt" />
+                      </BtnRouteDelete>
+                    </Route>
+                    <div className="ellipsis">
+                      <i class="fas fa-ellipsis-v" />
+                    </div>
+                  </div>
+                ))}
+                </div>
+              )}{" "}
+
             </div>
 
           </div>
@@ -304,8 +344,10 @@ class Project extends React.Component {
             )}
           {modal && (
             
-            <EateryInfo eateryInfoCloseMC={eateryInfoCloseMC} />
-          )}
+            <EateryInfo 
+              eateryInfoCloseMC={eateryInfoCloseMC} 
+              storeName={this.state.storeName}
+            />)}
 
           <div className="googleMap" style={style}>
             <Maps
@@ -320,6 +362,28 @@ class Project extends React.Component {
     );
   }
 }
+
+
+
+const Route = styled.div`
+  text-align: center;
+  margin: 10px auto 10px auto;
+  display: block;
+  border: 1px solid blue;
+  border-radius: 10px;
+  width: 200px;
+`
+  
+const RouteEateryInfo = styled.div`
+  text-align: center;
+  margin: 10px auto 0 auto;
+  display: block;
+  border: 1px solid red;
+  border-radius: 10px;
+  width: 180px;
+  height: 100px;
+  background-color: gray;
+`
 
 const Button1 = styled.button`
   background: transparent;
@@ -342,7 +406,7 @@ const Button1 = styled.button`
 
   `}
 `
-  
+
 const Title = styled.input`
   width: 90%;
   height: 30px;
@@ -373,6 +437,38 @@ const Label = styled.label`
   ${props => props.totalExpense && css`
     margin: 3px 0px 5px 10px;
   `}
+
+  ${props => props.time && css`
+    width: 30px;
+    margin: 5px auto 0px auto;
+    font-size: 0.9em;
+    `}
+    
+    ${props => props.expense && css`
+    width: 30px;
+    margin: 0px auto 7px auto;
+    font-size: 0.9em;
+  `}
+`
+
+const BtnRouteDelete = styled.button`
+  border-radius: 100px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 20px;
+  margin: auto;
+  float: right;
+  position: relative;
+  right: 20px;
+  top: 13px;
+  font-size: 0.9em;
+  cursor: pointer;
+
+  &:hover{
+    color: palevioletred;
+  }
 `
 
 export default withLogin(Project);

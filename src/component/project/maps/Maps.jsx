@@ -152,7 +152,7 @@ class Maps extends React.Component {
               clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정
             });
 
-            console.log("위치 잘 찍히니? 네 => " + marker.getTitle());
+            //console.log("위치 잘 찍히니? 네 => " + marker.getTitle());
 
             // ------------------------------ 마커에 클릭이벤트를 등록하긔 ------------------------------
 

@@ -29,6 +29,13 @@
   clear: both;
 }
 
+.wow{
+  overflow: scroll;
+  display: block;
+  height: 85%;
+  background-color: white;
+}
+
 .basicInfo{
   display: block;
   margin: 0px 20px;
@@ -54,6 +61,39 @@
 
 .totalExpense:hover{
   border: 1px solid gray;
+}
+
+.routeDetailInfo{
+  position: relative;
+  left: -10px;
+  display: inline-block;
+  width: 120px;
+}
+
+.time{
+  font-size: 0.8em;
+  border: none;
+  width: 80px;
+}
+
+.time:hover{
+  border: 1px solid gray
+}
+
+.expense{
+  font-size: 0.8em;
+  border: none;
+  width: 80px;
+}
+
+.expense:hover{
+  border: 1px solid gray
+}
+
+.ellipsis{
+  text-align: center;
+  display: block;
+  margin: 0 auto;
 }
 
 .optimalPath{

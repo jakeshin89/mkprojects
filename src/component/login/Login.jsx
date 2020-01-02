@@ -158,7 +158,8 @@ class Login extends Component{
 
 const GoogleButton = styled(GoogleLogin)`
   background-color: #F7E600;
-  color: black;
+  width: 242px;
+  color: red;
 `
 
 const KakaoButton = styled(KakaoLogin)`
@@ -175,7 +176,7 @@ const KakaoButton = styled(KakaoLogin)`
   cursor: pointer;
   `
   
-  const BtnOwnerLogin = styled.button`
+const BtnOwnerLogin = styled.button`
   width: 242px;
   height: 44px;
   padding: 0;
