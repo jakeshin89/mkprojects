@@ -68,8 +68,10 @@ class Project extends React.Component {
 
   handleSelection = async (storeName, coordinate) => {
     console.log('해당 음식점 클릭하자마자 1번만 실행됨')
-    console.log("storeName이 project에 잘 넘어 왔는가..?" + storeName);
-    console.log("coordinate이 project에 잘 넘어 왔는가...?" + coordinate);
+    console.log('handleSelection에서는 어떻게 나올까? ', this.state.storeResult);
+    //console.log("storeName이 project에 잘 넘어 왔는가..?" + storeName);
+    //console.log("coordinate이 project에 잘 넘어 왔는가...?" + coordinate);
+    
     await this.setState({
       addedStore: storeName,
       coordinate: coordinate
@@ -95,8 +97,8 @@ class Project extends React.Component {
     const { selectedStores, storeResult } = this.state;
     const result = [];
 
-    console.log('storeResult => ', storeResult); //얘는 null
-    console.log('selectedStores => ', selectedStores); //클릭한 음식점 이름, 좌표
+    console.log('●storeResult => ', storeResult); //얘는 null
+    console.log('지금까지 클릭한 selectedStores => ', selectedStores); //클릭한 음식점 이름, 좌표
     console.log('storeInfo 어마어마 => ', this.state.storeInfos); //db에 있는 음식점정보
 
      (async () => { 
@@ -120,25 +122,28 @@ class Project extends React.Component {
             window.stName, window.stAddress, window.stTel, window.stMainMenu);
           
             
-            // store에 좌표를 추가하기 ...드디어 성공 흑흑 JQuery 최고야
-            store = $.extend(store, coordinateObject);
-            
-            result.push(store);
-          }
+          // store에 좌표를 추가하기 ...드디어 성공 흑흑 JQuery 최고야
+          store = $.extend(store, coordinateObject);
+          
+          console.log('★★selectedStores', selectedStores);
+          console.log('★★storeResult', storeResult);
+          console.log('★★store', store);
+
+          result.push(store);
         }
-        return result;
-      });
-    }) ();
-    await this.setState({
-      storeResult: result,
-      tel: window.stTel,
-      address: window.stAddress,
-      storeName: window.stName,
-      mainMenu: window.mainMenu,
+      }
+      return result;
     });
-    console.log("찍혀야해..." + JSON.stringify(storeResult));
- 
-  };
+  }) ();
+  await this.setState({
+    storeResult: result,
+    tel: window.stTel,
+    address: window.stAddress,
+    storeName: window.stName,
+    mainMenu: window.mainMenu,
+  });
+  
+};
 
   shortestPath = () => {
     console.log("shortestPath() called!");
@@ -446,10 +451,6 @@ class Project extends React.Component {
     }
   };
 
-
-
-
-
   handleStoreChange = () => {
     console.log("handleStoreChange() called!!!!");
   };
@@ -546,14 +547,18 @@ class Project extends React.Component {
   dropStore (ownerNo) {
     console.log("dropStore() called!!")
     const {storeResult} = this.state;
+    
     this.setState({
       storeResult: storeResult.filter(storeResult => storeResult.ownerNo !== ownerNo)
     })
-  }
+
+    console.log('♥non-drop storeResult[]', storeResult);
+    console.log('★dropped storeResult[]', storeResult.filter(storeResult => storeResult.ownerNo !== ownerNo));
+  };
 
   componentDidMount() {
     this.getStoreInfo();
-  }
+  };
   
   componentDidUpdate() {
 
@@ -597,12 +602,59 @@ class Project extends React.Component {
     });
   }
 
+  saveProject = (e) => {
+    e.preventDefault();
+
+    const { title, date, totalExpense, storeResult } = this.state;
+    //console.log('너는 누구냐', window.sessionStorage.getItem('userNo'));
+    
+    let project = {
+      userNo: window.sessionStorage.getItem('userNo'),
+      title: title,
+      meetingDate: date,
+      totalExpense: totalExpense,
+      //여기까지
+      projectDetail: [
+        { routeNo: 0, ownerNo: 0 }
+      ]
+    }
+
+    if(project.userNo){
+      let rNo = 0;
+      for(var i = 0; i < storeResult.length; i++){
+        project.projectDetail.push({
+          routeNo: ++rNo,
+          ownerno: storeResult[i].ownerNo
+        })
+      }
+      project.projectDetail = project.projectDetail.filter(
+        store => store.routeNo !== 0
+      );
+    }else{
+      console.log('userID가 존재하지 않습니다.');
+    }
+
+    console.log('★프로젝트정보 => ', project);
+    
+    axios.post('http://localhost:9999/project', project)
+      .then( res => {
+        console.log(res);
+      })
+      .catch( err => {
+        console.log(err);
+      })
+
+  }
 
   render() {
-    const { storeResult, showResult, coords } = this.state;
+    const { storeResult, showResult, coords, 
+     storeName, tel, address, mainMenu } = this.state;
 
-    console.log('project.jsx render()');
+    console.log('project.jsx render() => 맛집순서배열', storeResult);
     console.log('제목이다 이것들아', this.state.title);
+
+    console.log('project.jsx가 render()되면서 현재 선택한 값이 잘 찍힐까? =>',
+     storeName, tel, address, mainMenu)
 
     const { modal, eateryInfoCloseMC, width } = this.state;
 
@@ -621,7 +673,7 @@ class Project extends React.Component {
           </div>
           <BtnGroup>
             <Button1 onClick={this.cancel}>취 소</Button1>
-            <Button1 save>저 장</Button1>
+            <Button1 save onClick={this.saveProject}>저 장</Button1>
           </BtnGroup>
         </div>
 
